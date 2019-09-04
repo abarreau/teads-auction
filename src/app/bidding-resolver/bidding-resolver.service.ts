@@ -33,7 +33,7 @@ export class BiddingResolverService {
     }
   }
 
-  computeSecondPriceAuctionWinner(bidders: Map<number, string>): [string, number] {
+  computeSecondPriceAuctionWinner(bidders: Map<number, string>, reservePrice: number): [string, number] {
     throw 'Not implemented yet !';
   }
 
