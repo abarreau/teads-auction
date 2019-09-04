@@ -22,7 +22,15 @@ export class BiddingResolverService {
   }
 
   findSecondHighestBid(bids: number[]): number {
-    throw 'Not implemented yet !';
+    if (bids.length == 0) return;
+
+    const bidsOrderByDesc =  bids.sort((a: number, b: number) => b - a);
+
+    if (bidsOrderByDesc.length > 1) {
+      return bidsOrderByDesc[ bidsOrderByDesc.length - 2 ];
+    } else {
+      return bidsOrderByDesc[ 0 ];
+    }
   }
 
   computeSecondPriceAuctionWinner(bidders: Map<number, string>): [string, number] {
