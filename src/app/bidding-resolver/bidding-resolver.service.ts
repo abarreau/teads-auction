@@ -17,12 +17,24 @@ export class BiddingResolverService {
       .set('E', [ 132, 135, 140 ]);
   }
 
-  findHighestBidder(bidders: Map<string, number[]>): string {
-    throw 'Not implemented yet !';
+  findHighestBidder(bidders: Map<string, number[]>): { bidder: string, highestBid: number } | undefined {
+    let highestBidder: { bidder: string, highestBid: number };
+
+    bidders.forEach((bids: number[], bidder: string) => {
+      const highestBidOfCurrentBidder = bids.sort().pop();
+
+      if (!highestBidder || highestBidder.highestBid < highestBidOfCurrentBidder) {
+        highestBidder = { bidder, highestBid: highestBidOfCurrentBidder };
+      }
+    });
+
+    return highestBidder;
   }
 
   findSecondHighestBid(bids: number[]): number {
-    if (bids.length == 0) return;
+    if (bids.length === 0) {
+      return;
+    }
 
     const bidsOrderByDesc =  bids.sort((a: number, b: number) => b - a);
 
@@ -34,7 +46,7 @@ export class BiddingResolverService {
   }
 
   computeSecondPriceAuctionWinner(bidders: Map<number, string>, reservePrice: number): [string, number] {
-    throw 'Not implemented yet !';
+    throw new Error('Not implemented yet !');
   }
 
 }
