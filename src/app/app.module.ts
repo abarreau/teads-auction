@@ -2,10 +2,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
+import { BiddingResolverComponent } from './bidding-resolver/bidding-resolver.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    BiddingResolverComponent
   ],
   imports: [
     BrowserModule
