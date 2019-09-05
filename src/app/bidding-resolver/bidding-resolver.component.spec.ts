@@ -27,11 +27,11 @@ describe('BiddingResolverComponent', () => {
   });
 
   it('should return second highest bid with multiple bids below reserve price', () => {
-    expect(service.findSecondHighestBid([1, 32, 10], 100)).toEqual(100);
+    expect(service.findWinningBidPrice([1, 32, 10], 100)).toEqual(100);
   });
 
   it('should return second highest bid with multiple bids above reserve price', () => {
-    expect(service.findSecondHighestBid([110, 32, 200], 100)).toEqual(110);
+    expect(service.findWinningBidPrice([110, 32, 200], 100)).toEqual(110);
   });
 
   it('should return second highest bid with no bids', () => {
@@ -39,11 +39,11 @@ describe('BiddingResolverComponent', () => {
   });
 
   it('should return second highest bid with one bid below reserve price', () => {
-    expect(service.findSecondHighestBid([1], 100)).toEqual(100);
+    expect(service.findWinningBidPrice([1], 100)).toEqual(100);
   });
 
   it('should return second highest bid with one bid above reserve price', () => {
-    expect(service.findSecondHighestBid([200], 100)).toEqual(200);
+    expect(service.findWinningBidPrice([200], 100)).toEqual(200);
   });
 
   it('should find highest bidder with multiple bidders', () => {

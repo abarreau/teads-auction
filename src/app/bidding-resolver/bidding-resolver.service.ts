@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HighestBidsWithWinner } from './bidding-resolver.models';
+import { HighestBidsWithWinner, WinningBidder } from './bidding-resolver.models';
 
 @Injectable({
   providedIn: 'root'
@@ -8,13 +8,32 @@ export class BiddingResolverService {
 
   constructor() { }
 
-  generateAuction(): Map<string, number[]> {
+  generateTeadsAuction(): Map<string, number[]> {
     return new Map<string, number[]>()
       .set('A', [ 110, 130 ])
       .set('B', [ 0 ])
       .set('C', [ 125 ])
       .set('D', [ 105, 115, 90 ])
       .set('E', [ 132, 135, 140 ]);
+  }
+
+  generateRandomAuction(): Map<string, number[]> {
+    const results = new Map<string, number[]>();
+    const randomNumOfBidders = 2 + Math.floor(Math.random() * 3);
+
+    for (let numOfBidders = 0; numOfBidders < randomNumOfBidders; numOfBidders++) {
+      const randomNumOfBids = 1 + Math.floor(Math.random() * 4);
+      const bids = [];
+
+      for (let numOfBid = 0; numOfBid < randomNumOfBids; numOfBid++) {
+        const randomBid = Math.floor(Math.random() * 200);
+        bids.push(randomBid);
+      }
+
+      results.set(numOfBidders.toString(), bids);
+    }
+
+    return results;
   }
 
   extractHighestBidFromBiddersWithWinner(bidders: Map<string, number[]>): HighestBidsWithWinner {
@@ -37,7 +56,7 @@ export class BiddingResolverService {
     };
   }
 
-  findSecondHighestBid(bids: number[], reservePrice): number {
+  findWinningBidPrice(bids: number[], reservePrice): number {
     if (bids.length === 0) {
       return reservePrice;
     }
@@ -47,9 +66,8 @@ export class BiddingResolverService {
     return bidsAboveReservePriceByDesc.length > 0 ? bidsAboveReservePriceByDesc.pop() : reservePrice;
   }
 
-  computeSecondPriceAuctionWinner(bidders: Map<string, number[]>, reservePrice: number): { bidder: string, price: number} {
+  computeSecondPriceAuctionWinner(bidders: Map<string, number[]>, reservePrice: number): WinningBidder {
     const highestBidsWithWinner = this.extractHighestBidFromBiddersWithWinner(bidders);
-    const flattenBids = Array.from(highestBidsWithWinner.highestBidPerWinner.values());
 
     if (!highestBidsWithWinner || !highestBidsWithWinner.winner) {
       return;

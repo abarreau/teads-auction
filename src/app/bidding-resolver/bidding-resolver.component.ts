@@ -13,7 +13,8 @@ export class BiddingResolverComponent implements OnInit {
   constructor(private readonly biddingResolverService: BiddingResolverService) { }
 
   ngOnInit() {
-    this.bids = this.biddingResolverService.generateAuction();
+    this.bids = this.biddingResolverService.generateTeadsAuction();
+    this.winningBidder = this.biddingResolverService.computeSecondPriceAuctionWinner(this.bids, 100);
   }
 
 }
