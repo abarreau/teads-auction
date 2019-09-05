@@ -2,7 +2,7 @@
 
 <button (click)="generateRandomAuction()">Generate another random auction</button>
 
-<p>Let's consider the following second price Auction :</p>
+<p>Let's consider the following second price Auction (with a reserve price of {{ reservePrice }}) :</p>
 
 <pre>{{ prettyPrintBids() | json }}</pre>
 

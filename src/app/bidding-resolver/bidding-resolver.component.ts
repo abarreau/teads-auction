@@ -11,17 +11,18 @@ export class BiddingResolverComponent implements OnInit {
 
   public bids: Map<string, number[]>;
   public winningBidder: WinningBidder;
+  public reservePrice = 100;
 
   constructor(private readonly biddingResolverService: BiddingResolverService) { }
 
   ngOnInit() {
     this.bids = this.biddingResolverService.generateTeadsAuction();
-    this.winningBidder = this.biddingResolverService.computeSecondPriceAuctionWinner(this.bids, 100);
+    this.winningBidder = this.biddingResolverService.computeSecondPriceAuctionWinner(this.bids, this.reservePrice);
   }
 
   generateRandomAuction() {
     this.bids = this.biddingResolverService.generateRandomAuction();
-    this.winningBidder = this.biddingResolverService.computeSecondPriceAuctionWinner(this.bids, 100);
+    this.winningBidder = this.biddingResolverService.computeSecondPriceAuctionWinner(this.bids, this.reservePrice);
   }
 
   prettyPrintBids() {
