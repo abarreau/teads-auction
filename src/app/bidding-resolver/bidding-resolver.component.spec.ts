@@ -35,7 +35,7 @@ describe('BiddingResolverComponent', () => {
   });
 
   it('should return second highest bid with no bids', () => {
-    expect(service.findSecondHighestBid([], 100)).toBeUndefined();
+    expect(service.findWinningBidPrice([], 100)).toEqual(100);
   });
 
   it('should return second highest bid with one bid below reserve price', () => {
@@ -107,7 +107,7 @@ describe('BiddingResolverComponent', () => {
     const bidders = new Map<string, number[]>().set('B', [ 110 ]);
     expect(service.computeSecondPriceAuctionWinner(bidders, 100)).toEqual({
       bidder: 'B',
-      price: 110
+      price: 100
     });
   });
 

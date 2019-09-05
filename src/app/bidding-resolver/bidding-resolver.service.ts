@@ -39,26 +39,28 @@ export class BiddingResolverService {
 
   findSecondHighestBid(bids: number[], reservePrice): number {
     if (bids.length === 0) {
-      return;
+      return reservePrice;
     }
 
-    const bidsOrderByDesc =  bids.sort((a: number, b: number) => b - a);
-    const secondHighBid = bidsOrderByDesc.length > 1 ? bidsOrderByDesc[ 1 ] : bidsOrderByDesc[ 0 ];
+    const bidsAboveReservePriceByDesc = bids.sort((a: number, b: number) => b - a).filter(bid => bid > reservePrice);
 
-    return secondHighBid >= reservePrice ? secondHighBid : reservePrice;
+    return bidsAboveReservePriceByDesc.length > 0 ? bidsAboveReservePriceByDesc.pop() : reservePrice;
   }
 
   computeSecondPriceAuctionWinner(bidders: Map<string, number[]>, reservePrice: number): { bidder: string, price: number} {
     const highestBidsWithWinner = this.extractHighestBidFromBiddersWithWinner(bidders);
     const flattenBids = Array.from(highestBidsWithWinner.highestBidPerWinner.values());
 
-    if (!highestBidsWithWinner || !flattenBids || flattenBids.length === 0) {
+    if (!highestBidsWithWinner || !highestBidsWithWinner.winner) {
       return;
     }
 
+    const flattenedBids = Array.from(highestBidsWithWinner.highestBidPerWinner.values());
+    const nonWinningBids = flattenedBids.slice(0, flattenedBids.length - 1); // we remove the winning bid
+
     return {
       bidder: highestBidsWithWinner.winner,
-      price: this.findSecondHighestBid(flattenBids, reservePrice)
+      price: this.findWinningBidPrice(nonWinningBids, reservePrice)
     };
   }
 
