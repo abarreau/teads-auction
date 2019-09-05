@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BiddingResolverService } from './bidding-resolver.service';
+import { WinningBidder } from './bidding-resolver.models';
 
 @Component({
   selector: 'app-bidding-resolver',
@@ -8,13 +9,23 @@ import { BiddingResolverService } from './bidding-resolver.service';
 })
 export class BiddingResolverComponent implements OnInit {
 
-  private bids: Map<string, number[]>;
+  public bids: Map<string, number[]>;
+  public winningBidder: WinningBidder;
 
   constructor(private readonly biddingResolverService: BiddingResolverService) { }
 
   ngOnInit() {
     this.bids = this.biddingResolverService.generateTeadsAuction();
     this.winningBidder = this.biddingResolverService.computeSecondPriceAuctionWinner(this.bids, 100);
+  }
+
+  generateRandomAuction() {
+    this.bids = this.biddingResolverService.generateRandomAuction();
+    this.winningBidder = this.biddingResolverService.computeSecondPriceAuctionWinner(this.bids, 100);
+  }
+
+  prettyPrintBids() {
+    return Array.from(this.bids);
   }
 
 }

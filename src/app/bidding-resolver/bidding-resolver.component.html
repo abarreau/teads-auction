@@ -1,1 +1,9 @@
-<p>bidding-resolver works!</p>
+<h1>Teads auction</h1>
+
+<button (click)="generateRandomAuction()">Generate another random auction</button>
+
+<p>Let's consider the following second price Auction :</p>
+
+<pre>{{ prettyPrintBids() | json }}</pre>
+
+<h2>The winner is {{ winningBidder.bidder }} with a price of {{ winningBidder.price }}</h2>
