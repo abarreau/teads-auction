@@ -8,6 +8,10 @@ export class BiddingResolverService {
 
   constructor() { }
 
+  /**
+   * Generates the Teads Auction problem.
+   * @return a map bidders identified by string and containing their bids
+   */
   generateTeadsAuction(): Map<string, number[]> {
     return new Map<string, number[]>()
       .set('A', [ 110, 130 ])
@@ -17,6 +21,10 @@ export class BiddingResolverService {
       .set('E', [ 132, 135, 140 ]);
   }
 
+  /**
+   * Generates a random auction with a random number of bidders and a random number of bids per bidder.
+   * @return a map bidders identified by string and containing their bids
+   */
   generateRandomAuction(): Map<string, number[]> {
     const results = new Map<string, number[]>();
     const randomNumOfBidders = 2 + Math.floor(Math.random() * 3);
@@ -36,13 +44,22 @@ export class BiddingResolverService {
     return results;
   }
 
+  /**
+   * Given a map of bidders with their bids, find the winner of the auction :
+   * The buyer winning the auction is the one with the highest bid.
+   * @param bidders a map of bidders with their bids
+   */
   extractHighestBidFromBiddersWithWinner(bidders: Map<string, number[]>): HighestBidsWithWinner {
     let highestBidder: { bidder: string, highestBid: number };
     const highestBidPerUser = new Map<string, number>();
 
+    // to find the highest bidder, we must iterate over each bidder
     bidders.forEach((bids: number[], bidder: string) => {
+
+      // we sort the bids by ascending order to find the highest one
       const highestBidOfCurrentBidder = bids.sort((a: number, b: number) => a - b)[bids.length - 1];
 
+      // if we found a new highest bidder, we store it
       if (!highestBidder || highestBidder.highestBid < highestBidOfCurrentBidder) {
         highestBidder = { bidder, highestBid: highestBidOfCurrentBidder };
       }
@@ -50,6 +67,7 @@ export class BiddingResolverService {
       highestBidPerUser.set(bidder, highestBidOfCurrentBidder);
     });
 
+    // we remove from the bidder the winning one in order to compute the non winning buyers.
     if (highestBidder) {
       highestBidPerUser.delete(highestBidder.bidder);
     }
@@ -60,6 +78,13 @@ export class BiddingResolverService {
     };
   }
 
+  /**
+   * Returns the winning price from the bids.
+   * The winning price is the highest bid price from a non-winning buyer above the reserve price
+   * (or the reserve price if none applies)
+   * @param bids a list of bid prices comming from non winning byers
+   * @param reservePrice the auction reserve price
+   */
   findWinningBidPrice(bids: number[], reservePrice): number {
     if (bids.length === 0) {
       return reservePrice;
@@ -70,6 +95,11 @@ export class BiddingResolverService {
     return bidsAboveReservePriceByDesc.length > 0 ? bidsAboveReservePriceByDesc.pop() : reservePrice;
   }
 
+  /**
+   * Given a map of bidders, computes the winner of the auction with the winning price.
+   * @param bidders a map of bidders with their bids
+   * @param reservePrice the auction reserve price
+   */
   computeSecondPriceAuctionWinner(bidders: Map<string, number[]>, reservePrice: number): WinningBidder {
     const highestBidsWithWinner = this.extractHighestBidFromBiddersWithWinner(bidders);
 
