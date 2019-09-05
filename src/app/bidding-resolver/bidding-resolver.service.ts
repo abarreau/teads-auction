@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-
+import { HighestBidsWithWinner } from './bidding-resolver.models';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +17,7 @@ export class BiddingResolverService {
       .set('E', [ 132, 135, 140 ]);
   }
 
-  findHighestBidder(bidders: Map<string, number[]>): { bidder: string, highestBid: number } | undefined {
+  extractHighestBidFromBiddersWithWinner(bidders: Map<string, number[]>): HighestBidsWithWinner {
     let highestBidder: { bidder: string, highestBid: number };
 
     bidders.forEach((bids: number[], bidder: string) => {
@@ -28,7 +28,10 @@ export class BiddingResolverService {
       }
     });
 
-    return highestBidder;
+    return {
+      highestBidPerWinner: highestBidPerUser,
+      winner: highestBidder ? highestBidder.bidder : undefined
+    };
   }
 
   findSecondHighestBid(bids: number[]): number {

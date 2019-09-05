@@ -43,28 +43,36 @@ describe('BiddingResolverComponent', () => {
       .set('A', [ 110, 130 ])
       .set('B', [ 0 ])
       .set('C', [ 125 ])
-      .set('E', [ 132, 135, 140 ])
-      .set('D', [ 105, 115, 90 ]);
+      .set('D', [ 105, 115, 90 ])
+      .set('E', [ 132, 135, 140 ]);
 
-    expect(service.findHighestBidder(bidders)).toEqual({
-      bidder: 'E',
-      highestBid: 140
+    expect(service.extractHighestBidFromBiddersWithWinner(bidders)).toEqual({
+      winner: 'E',
+      highestBidPerWinner: new Map()
+        .set('A', 130)
+        .set('B', 0)
+        .set('C', 125)
+        .set('D', 115)
+        .set('E', 140)
     });
   });
 
   it('should find highest bidder with no bidders', () => {
     const bidders = new Map<string, number[]>();
 
-    expect(service.findHighestBidder(bidders)).toBeUndefined();
+    expect(service.extractHighestBidFromBiddersWithWinner(bidders)).toEqual({
+      highestBidPerWinner: new Map(),
+      winner: undefined
+    });
   });
 
   it('should find highest bidder with one bidder', () => {
     const bidders = new Map<string, number[]>()
       .set('B', [ 0 ]);
 
-    expect(service.findHighestBidder(bidders)).toEqual({
-      bidder: 'B',
-      highestBid: 0
+    expect(service.extractHighestBidFromBiddersWithWinner(bidders)).toEqual({
+      winner: 'B',
+      highestBidPerWinner: new Map().set('B', 0)
     });
   });
 
