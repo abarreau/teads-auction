@@ -50,8 +50,12 @@ export class BiddingResolverService {
       highestBidPerUser.set(bidder, highestBidOfCurrentBidder);
     });
 
+    if (highestBidder) {
+      highestBidPerUser.delete(highestBidder.bidder);
+    }
+
     return {
-      highestBidPerWinner: highestBidPerUser,
+      highestBidPerNonWinningBidder: highestBidPerUser,
       winner: highestBidder ? highestBidder.bidder : undefined
     };
   }
@@ -61,7 +65,7 @@ export class BiddingResolverService {
       return reservePrice;
     }
 
-    const bidsAboveReservePriceByDesc = bids.sort((a: number, b: number) => b - a).filter(bid => bid > reservePrice);
+    const bidsAboveReservePriceByDesc = bids.filter(bid => bid > reservePrice).sort((a: number, b: number) => a - b);
 
     return bidsAboveReservePriceByDesc.length > 0 ? bidsAboveReservePriceByDesc.pop() : reservePrice;
   }
@@ -73,8 +77,7 @@ export class BiddingResolverService {
       return;
     }
 
-    const flattenedBids = Array.from(highestBidsWithWinner.highestBidPerWinner.values());
-    const nonWinningBids = flattenedBids.slice(0, flattenedBids.length - 1); // we remove the winning bid
+    const nonWinningBids = Array.from(highestBidsWithWinner.highestBidPerNonWinningBidder.values());
 
     return {
       bidder: highestBidsWithWinner.winner,

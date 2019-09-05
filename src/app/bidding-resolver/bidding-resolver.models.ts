@@ -1,6 +1,6 @@
 export interface HighestBidsWithWinner {
   winner: string;
-  highestBidPerWinner: Map<string, number>;
+  highestBidPerNonWinningBidder: Map<string, number>;
 }
 
 export interface WinningBidder {

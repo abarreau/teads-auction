@@ -26,23 +26,23 @@ describe('BiddingResolverComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should return second highest bid with multiple bids below reserve price', () => {
+  it('should return winning bid price with multiple bids below reserve price', () => {
     expect(service.findWinningBidPrice([1, 32, 10], 100)).toEqual(100);
   });
 
-  it('should return second highest bid with multiple bids above reserve price', () => {
-    expect(service.findWinningBidPrice([110, 32, 200], 100)).toEqual(110);
+  it('should return winning bid price with multiple bids above reserve price', () => {
+    expect(service.findWinningBidPrice([110, 32, 200], 100)).toEqual(200);
   });
 
-  it('should return second highest bid with no bids', () => {
+  it('should return winning bid price with no bids', () => {
     expect(service.findWinningBidPrice([], 100)).toEqual(100);
   });
 
-  it('should return second highest bid with one bid below reserve price', () => {
+  it('should return winning bid price with one bid below reserve price', () => {
     expect(service.findWinningBidPrice([1], 100)).toEqual(100);
   });
 
-  it('should return second highest bid with one bid above reserve price', () => {
+  it('should return winning bid price with one bid above reserve price', () => {
     expect(service.findWinningBidPrice([200], 100)).toEqual(200);
   });
 
@@ -56,12 +56,11 @@ describe('BiddingResolverComponent', () => {
 
     expect(service.extractHighestBidFromBiddersWithWinner(bidders)).toEqual({
       winner: 'E',
-      highestBidPerWinner: new Map()
+      highestBidPerNonWinningBidder: new Map()
         .set('A', 130)
         .set('B', 0)
         .set('C', 125)
         .set('D', 115)
-        .set('E', 140)
     });
   });
 
@@ -69,7 +68,7 @@ describe('BiddingResolverComponent', () => {
     const bidders = new Map<string, number[]>();
 
     expect(service.extractHighestBidFromBiddersWithWinner(bidders)).toEqual({
-      highestBidPerWinner: new Map(),
+      highestBidPerNonWinningBidder: new Map(),
       winner: undefined
     });
   });
@@ -80,7 +79,7 @@ describe('BiddingResolverComponent', () => {
 
     expect(service.extractHighestBidFromBiddersWithWinner(bidders)).toEqual({
       winner: 'B',
-      highestBidPerWinner: new Map().set('B', 0)
+      highestBidPerNonWinningBidder: new Map()
     });
   });
 
@@ -92,7 +91,10 @@ describe('BiddingResolverComponent', () => {
       .set('E', [ 132, 135, 140 ])
       .set('D', [ 105, 115, 90 ]);
 
-    service.computeSecondPriceAuctionWinner(bidders, 100);
+    expect(service.computeSecondPriceAuctionWinner(bidders, 100)).toEqual({
+      bidder: 'E',
+      price: 130
+    });
   });
 
   it('should compute second price auction winner with one bidder with reserve price unreached', () => {
