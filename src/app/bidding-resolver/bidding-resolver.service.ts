@@ -41,8 +41,14 @@ export class BiddingResolverService {
     return bidsOrderByDesc.length > 1 ? bidsOrderByDesc[ 1 ] : bidsOrderByDesc[ 0 ];
   }
 
-  computeSecondPriceAuctionWinner(bidders: Map<number, string>, reservePrice: number): [string, number] {
-    throw new Error('Not implemented yet !');
+  computeSecondPriceAuctionWinner(bidders: Map<string, number[]>, reservePrice: number): { bidder: string, price: number} {
+    const highestBidsWithWinner = this.extractHighestBidFromBiddersWithWinner(bidders);
+    const flattenBids = Array.from(highestBidsWithWinner.highestBidPerWinner.values());
+
+    return {
+      bidder: highestBidsWithWinner.winner,
+      price: this.findSecondHighestBid(flattenBids)
+    };
   }
 
 }
