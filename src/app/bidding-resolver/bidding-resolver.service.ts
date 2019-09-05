@@ -38,11 +38,7 @@ export class BiddingResolverService {
 
     const bidsOrderByDesc =  bids.sort((a: number, b: number) => b - a);
 
-    if (bidsOrderByDesc.length > 1) {
-      return bidsOrderByDesc[ bidsOrderByDesc.length - 2 ];
-    } else {
-      return bidsOrderByDesc[ 0 ];
-    }
+    return bidsOrderByDesc.length > 1 ? bidsOrderByDesc[ 1 ] : bidsOrderByDesc[ 0 ];
   }
 
   computeSecondPriceAuctionWinner(bidders: Map<number, string>, reservePrice: number): [string, number] {
