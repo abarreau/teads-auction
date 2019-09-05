@@ -6,7 +6,7 @@ This project uses Angular 8 to solve a second price auction problem.
 
 You must have npm v10.X and more to launch this app locally.
 You must have Chrome too (for the tests).
-If you don't want to build the app yourself, an online version is available here :
+If you don't want to build the app yourself, an online version is available here : `https://xandar.github.io/teads-auction/`
 
 ## How to launch the app ?
 
@@ -14,7 +14,7 @@ You need to install dependencies first. Type the following command : `npm instal
 
 Then type : `npm run start`
 
-When the app is ready, open your favorite browser at the following URL : `http://localhost:4200`*
+When the app is ready, open your favorite browser at the following URL : `http://localhost:4200`
 
 Enjoy !
 
